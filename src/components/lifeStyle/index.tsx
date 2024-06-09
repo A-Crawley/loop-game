@@ -2,7 +2,7 @@ import { BurgersAndFries } from "./burgersAndFriesLtd";
 
 export const LifeStyles = () => {
   return (
-    <div>
+    <div className="h-full w-full p-4">
       <BurgersAndFries />
     </div>
   );

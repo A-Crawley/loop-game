@@ -24,16 +24,10 @@ export const JobDisplay = ({
     [currentJob, job],
   );
 
-  const jobName = useMemo(
-    () => `${job?.name}: ${job?.level}`,
-    [job?.name, job?.level],
-  );
-
   const handleClick = useCallback(() => {
-    console.log(jobName);
     dispatch(setCurrentJob({ jobId }));
     onClick?.(job);
-  }, [job, jobName]);
+  }, [job]);
 
   if (job?.isLocked) {
     return null;
@@ -47,13 +41,18 @@ export const JobDisplay = ({
           {isCurrent && <span>*</span>}
         </p>
       </div>
-      <div className="col-span-4">
+      <div>
+        <p>{job?.level}</p>
+      </div>
+      <div className="col-span-3">
         <ProgressBar
           max={job?.experienceToNextLevel ?? 0}
           progress={job?.currentExperience ?? 0}
           animate
-          innerText={jobName}
         />
+      </div>
+      <div>
+        <p>{job?.baseSalary} p/d</p>
       </div>
     </div>
   );

@@ -2,13 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
 import { Game } from "../types/Game";
 import { Jobs } from "../types/Jobs";
+import { JobsType } from "../types/JobTypes";
 
 const state: Game = {
-  date: moment({ date: 7, month: 5, year: 1900 }).toISOString(),
+  date: moment({ date: 7, month: 5, year: 1950 }).toISOString(),
   age: 12,
   jobs: Jobs,
   currentJob: null,
   money: 0,
+};
+
+const checkUnlocks = (jobs: JobsType[]) => {
+  if (jobs.find((job) => job.id === 1)?.level === 10) {
+    jobs.find((job) => job.id === 2)!.isLocked = false;
+  }
 };
 
 export const gameTickSlice = createSlice({
@@ -33,16 +40,18 @@ export const gameTickSlice = createSlice({
       ) {
         state.currentJob.currentExperience = 0;
 
-        state.currentJob.currentSalary = Number(
+        state.currentJob.baseSalary = Number(
           Number(
-            state.currentJob.currentSalary *
+            state.currentJob.baseSalary *
               state.currentJob.levelSalaryMultiplier,
           ).toFixed(2),
         );
 
-        state.currentJob.experienceToNextLevel = Math.ceil(
-          state.currentJob.experienceToNextLevel *
-            state.currentJob.levelExperienceMultiplier,
+        state.currentJob.experienceToNextLevel = Number(
+          Number(
+            state.currentJob.experienceToNextLevel *
+              state.currentJob.levelExperienceMultiplier,
+          ).toFixed(2),
         );
 
         state.currentJob.level += 1;
@@ -50,14 +59,22 @@ export const gameTickSlice = createSlice({
         state.currentJob.currentExperience += 1;
       }
 
+      state.currentJob.currentSalary = Number(
+        Number(
+          state.currentJob.baseSalary + state.currentJob.currentSalary,
+        ).toFixed(2),
+      );
+
       state.jobs = [
         ...state.jobs.filter((j) => j.id !== state.currentJob?.id),
         { ...state.currentJob },
       ];
+
+      checkUnlocks(state.jobs);
     },
     incrementMoney: (state) => {
       state.money = Number(
-        Number(state.money + (state.currentJob?.currentSalary ?? 0)).toFixed(2),
+        Number(state.money + (state.currentJob?.baseSalary ?? 0)).toFixed(2),
       );
     },
   },

@@ -15,7 +15,7 @@ const ProgressBar = ({
         className="absolute left-0 top-0 h-full bg-green-200/50 transition-all ease-linear duration-100"
         style={{ width: `${animate ? (progress / max) * 100 : 100}%` }}
       ></div>
-      <div>{innerText ?? `${animate ? `${(progress / max) * 100}%` : ""}`}</div>
+      <div>{innerText ?? ""}</div>
     </div>
   );
 };
