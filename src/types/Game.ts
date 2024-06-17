@@ -6,4 +6,6 @@ export type Game = {
   jobs: JobsType[];
   currentJob: JobsType | null
   money: number
+  income: number
+  spend: number
 };

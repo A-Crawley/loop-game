@@ -8,8 +8,10 @@ const state: Game = {
   date: moment({ date: 7, month: 5, year: 1950 }).toISOString(),
   age: 12,
   jobs: Jobs,
-  currentJob: null,
+  currentJob: Jobs[0],
   money: 0,
+  income: 1,
+  spend: 0,
 };
 
 const checkUnlocks = (jobs: JobsType[]) => {
@@ -31,6 +33,7 @@ export const gameTickSlice = createSlice({
       const newJob = state.jobs.find((j) => j.id === action.payload.jobId);
       if (!newJob) return;
       state.currentJob = newJob;
+      state.income = newJob.baseSalary;
     },
     incrementJob: (state) => {
       if (!state.currentJob) return;
@@ -46,6 +49,8 @@ export const gameTickSlice = createSlice({
               state.currentJob.levelSalaryMultiplier,
           ).toFixed(2),
         );
+
+        state.income = state.currentJob.baseSalary;
 
         state.currentJob.experienceToNextLevel = Number(
           Number(

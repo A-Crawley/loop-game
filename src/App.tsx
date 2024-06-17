@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import Home from "./components/home";
 import Topbar from "./components/topbar";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   incrementDate,
   incrementJob,
@@ -15,30 +15,29 @@ import { JobsType } from "./types/JobTypes";
 function App() {
   const dispatch = useDispatch();
   const { jobs } = useSelector((state: { gameTick: Game }) => state.gameTick);
-  const [gameTickInterval, setGameTickInterval] = useState<
-    number | undefined
-  >();
   const [showDebug, setShowDebug] = useState(false);
+  const { speed } = useSelector(
+    (state: { gameSpeed: { speed: number } }) => state.gameSpeed,
+  );
 
   useEffect(() => {
-    let interval = 0;
-    if (!gameTickInterval) {
-      interval = setInterval(() => {
-        dispatch(incrementDate());
-        dispatch(incrementJob());
-        dispatch(incrementMoney());
-      }, 100);
-      setGameTickInterval(interval);
-      dispatch(setCurrentJob({ jobId: 1 }));
-      console.log("created interval");
+    console.log("hi", speed);
+    if (speed === 0) {
+      return;
     }
+    let interval = 0;
+    interval = setInterval(() => {
+      dispatch(incrementDate());
+      dispatch(incrementJob());
+      dispatch(incrementMoney());
+    }, speed);
+    console.log("created interval", interval);
 
     return () => {
       console.log("removed interval", interval);
       clearInterval(interval);
-      setGameTickInterval(undefined);
     };
-  }, []);
+  }, [speed]);
 
   return (
     <div className="h-screen w-screen">

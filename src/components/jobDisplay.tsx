@@ -44,7 +44,7 @@ export const JobDisplay = ({
       <div>
         <p>{job?.level}</p>
       </div>
-      <div className="col-span-3">
+      <div className="col-span-2">
         <ProgressBar
           max={job?.experienceToNextLevel ?? 0}
           progress={job?.currentExperience ?? 0}
@@ -53,6 +53,9 @@ export const JobDisplay = ({
       </div>
       <div>
         <p>{job?.baseSalary} p/d</p>
+      </div>
+      <div>
+        <p>{job?.maxLevel}</p>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ export type JobsType = {
   name: string;
   isLocked: boolean;
   level: number;
+  maxLevel: number;
   currentExperience: number;
   currentSalary: number;
   experienceToNextLevel: number;
